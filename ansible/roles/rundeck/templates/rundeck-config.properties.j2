@@ -1,0 +1,11 @@
+#loglevel.default is the default log level for jobs: ERROR,WARN,INFO,VERBOSE,DEBUG
+loglevel.default=INFO
+rdeck.base=/var/lib/rundeck
+
+rss.enabled=false
+grails.serverURL=http://{{ rundeck_vars.server_name }}:{{ rundeck_vars.port }}
+server.useForwardHeaders=true
+dataSource.dbCreate = update
+dataSource.url = jdbc:h2:file:/var/lib/rundeck/data/rundeckdb;MVCC=true
+rundeck.log4j.config.file = /etc/rundeck/log4j.properties
+rundeck.api.tokens.duration.max=0

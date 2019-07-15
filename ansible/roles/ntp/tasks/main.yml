@@ -1,0 +1,11 @@
+---
+- name: setup chrony
+  import_tasks: common.yml
+
+- name: setup chrony server
+  import_tasks: server.yml
+  when: "'ntpservers' in group_names"
+
+- name: setup chrony client
+  import_tasks: client.yml
+  when: "'ntpservers' not in group_names"

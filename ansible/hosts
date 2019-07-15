@@ -1,0 +1,30 @@
+all:
+    children:
+        controllers:
+            hosts:
+                ansible:
+                    ansible_host: 192.168.20.101
+        servers:
+            hosts:
+                server1:
+                    ansible_host: 192.168.20.102
+                server2:
+                    ansible_host: 192.168.20.103
+        ntpservers:
+            hosts:
+                ntp1:
+                    ansible_host: 192.168.20.104
+                ntp2:
+                    ansible_host: 192.168.20.105
+        rundeck:
+            hosts:
+                rundeck:
+                    ansible_host: 192.168.20.107
+        rootca:
+            hosts:
+                pki1:
+                    ansible_host: 192.168.20.106
+        intermediateca:
+            hosts:
+                pki1:
+                    ansible_host: 192.168.20.106

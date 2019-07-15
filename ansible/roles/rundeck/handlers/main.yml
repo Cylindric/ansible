@@ -1,0 +1,15 @@
+---
+- name: enable_rundeckd
+  service:
+    name: "rundeckd"
+    enabled: yes
+
+- name: stop_rundeckd
+  service:
+    name: "rundeckd"
+    state: "stopped"
+
+- name: start_rundeckd
+  service:
+    name: "rundeckd"
+    state: "started"

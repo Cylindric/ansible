@@ -1,0 +1,15 @@
+---
+- name: Default pb
+  hosts: all
+  roles:
+    - ntp
+
+- name: PKI Root
+  hosts: rootca
+  roles:
+    - pki
+
+- name: Rundeck
+  hosts: rundeck
+  roles:
+    - rundeck

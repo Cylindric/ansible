@@ -1,0 +1,57 @@
+---
+- name: update everything
+  yum:
+    name: "*"
+    state: "latest"
+
+- name: install required packages
+  yum:
+    name: "{{ rundeck_required_packages }}"
+    state: installed
+
+- name: setting up rundeck repo
+  yum:
+    name: "https://repo.rundeck.org/latest.rpm"
+    state: present
+
+- name: install rundeck
+  yum:
+    name: rundeck
+    state: latest
+  notify:
+    - start_rundeckd
+    - enable_rundeckd
+
+- name: start rundeckd
+  service:
+    name: rundeckd
+    state: started
+    enabled: yes
+
+- name: copy up framework.properties file
+  template:
+    dest: "{{ rundeck_vars.confdir }}/framework.properties"
+    src: "./templates/framework.properties.j2"
+    group: "{{ rundeck_vars.user }}"
+    owner: "{{ rundeck_vars.user }}"
+  notify:
+    - stop_rundeckd
+    - start_rundeckd
+
+- name: copy up rundeck-config.properties file
+  template:
+    dest: "{{ rundeck_vars.confdir }}/rundeck-config.properties"
+    src: "./templates/rundeck-config.properties.j2"
+    group: "{{ rundeck_vars.user }}"
+    owner: "{{ rundeck_vars.user }}"
+  notify:
+    - stop_rundeckd
+    - start_rundeckd
+
+# - name: copy up rundeckd properties
+#   template:
+#     dest: "{{ rundeck_vars.sysdir }}/rundeckd"
+#     src: "./templates/rundeckd.j2"
+#   notify:
+#     - stop_rundeckd
+#     - start_rundeckd

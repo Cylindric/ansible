@@ -1,0 +1,8 @@
+---
+- name: install chrony server config
+  template:
+    src: chrony.conf.server.j2
+    dest: /etc/chrony.conf
+  notify:
+    - restart chronyd
+

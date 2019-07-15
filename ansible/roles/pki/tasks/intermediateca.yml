@@ -1,0 +1,52 @@
+---
+- name: Create intermediate structure
+  file:
+    path: /ca/int/certs
+    recurse: yes
+
+- name: Create intermediate structure
+  file:
+    path: /ca/int/requests
+    recurse: yes
+
+- name: install intermediate config
+  template:
+    src: root_to_intermediate.json.j2
+    dest: /ca/int/root_to_intermediate.json
+
+- name: install intermediate signing config
+  template:
+    src: intermediate_to_client.json.j2
+    dest: /ca/int/intermediate_to_client.json
+
+- name: install intermediate CSR config
+  template:
+    src: intermediate-ca-csr.json.j2
+    dest: /ca/int/int-csr.json
+
+- name: generate intermediate certificate
+  shell: cfssl gencert -initca /ca/int/int-csr.json | cfssljson -bare /ca/int/int
+  register: new_inter_cert
+  args:
+    creates: /ca/int/ca.pem
+
+- name: sign the intermediate certificate
+  shell: cfssl sign -ca /ca/root/ca.pem -ca-key /ca/root/ca-key.pem -config /ca/int/root_to_intermediate.json /ca/int/int.csr | cfssljson -bare /ca/int/int
+  when: new_inter_cert|changed
+
+- name: bundle the intermediate certificate with the root certificate
+  shell: mkbundle /ca/root/ca.pem /ca/int/int.pem
+  when: new_inter_cert|changed
+  # cfssl bundle -cert int.pem -key int-key.pem -ca-bundle /ca/root/ca.pem | cfssljson -bare int-bundle
+
+- name: share intermediate certificate
+  copy:
+    src: /ca/int/int.pem
+    dest: /vagrant/artifacts/certs/int.pem
+    remote_src: yes
+
+- name: share intermediate bundle
+  copy:
+    src: /ca/int/cert-bundle.crt
+    dest: /vagrant/artifacts/certs/cert-bundle.crt
+    remote_src: yes

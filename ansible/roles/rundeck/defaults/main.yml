@@ -1,0 +1,15 @@
+---
+rundeck_local_install: no
+
+rundeck_required_packages:
+  - java-1.8.0
+  - epel-release
+
+rundeck_vars:
+  confdir: "/etc/rundeck"
+  sysdir: "/etc/sysconfig"
+  plugindir: "/var/lib/rundeck/libext"
+  user: "rundeck"
+  server_name: "{{ server_hostname | default('rundeck') }}"
+  port: "{{ localhost_port | default('4440') }}"
+  session_timeout: "3600"

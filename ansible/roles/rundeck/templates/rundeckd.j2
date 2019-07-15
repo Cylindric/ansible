@@ -1,0 +1,9 @@
+RDECK_JVM_OPTS="-Drundeck.jaaslogin=true \
+       -Djava.security.auth.login.config={{ rundeck_vars.confdir }}/{{ rundeck_vars.jaas_filename }} \
+       -Dloginmodule.name={{ rundeck_vars.module_name }} \
+       -Dserver.session.timeout={{ rundeck_vars.session_timeout }} \
+       -Djavax.net.ssl.trustStore={{ rundeck_vars.confdir }}/ssl/truststore \
+       -Djavax.net.ssl.trustStoreType=jks \
+       -Djava.protocol.handler.pkgs=com.sun.net.ssl.internal.www.protocol \
+       -Duser.timezone=Europe/London"
+RDECK_JVM_SETTINGS="$RDECK_JVM_SETTINGS -Xmx4096m -Xms1024m"

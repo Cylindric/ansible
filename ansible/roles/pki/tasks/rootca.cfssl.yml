@@ -1,0 +1,33 @@
+---
+- name: Create root structure
+  file:
+    path: /ca/root
+    recurse: yes
+
+- name: install root config
+  template:
+    src: root-ca-config.json.j2
+    dest: /ca/root/ca-config.json
+
+- name: install root CSR config
+  template:
+    src: root-ca-csr.json.j2
+    dest: /ca/root/ca-csr.json
+
+- name: generate root certificate
+  shell: cfssl gencert -initca /ca/root/ca-csr.json | cfssljson -bare /ca/root/ca
+  args:
+    creates: /ca/root/ca.pem
+
+
+- name: create certificate share
+  file:
+    path: /vagrant/artifacts/certs
+    recurse: yes
+
+- name: share root certificate
+  copy:
+    src: /ca/root/ca.pem
+    dest: /vagrant/artifacts/certs/root.pem
+    remote_src: yes
+

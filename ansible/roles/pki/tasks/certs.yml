@@ -1,0 +1,47 @@
+---
+- name: generate certificate requests
+  template:
+    src: certificate.json.j2
+    dest: /ca/int/requests/{{item.name}}.json
+  with_items: "{{ pki_certificates }}"
+
+- name: find request files
+  find:
+    paths: /ca/int/requests
+    patterns: "*.json"
+  register: request_files
+
+- name: generate certificates
+  shell: cfssl gencert -ca /ca/int/int.pem -ca-key /ca/int/int-key.pem -config /ca/int/intermediate_to_client.json {{ item.path }} | cfssljson -bare /ca/int/certs/{{ (item.path | basename | splitext)[0] }}
+  args:
+    creates: /ca/int/certs/{{ item.path | basename | splitext }}
+  with_items: "{{ request_files.files }}"  
+- name: find CSR files
+  find:
+    paths: /ca/int/certs
+    patterns: "*.csr"
+  register: csr_files
+  
+- name: delete CSR files
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ csr_files.files }}"
+
+- name: create certificate share
+  file:
+    path: /vagrant/artifacts/certs
+    recurse: yes
+
+- name: find certificate files
+  find:
+    paths: /ca/int/certs
+    patterns: "*.pem"
+  register: pem_files
+  
+- name: share certificates
+  copy:
+    src: "{{ item.path }}"
+    dest: /vagrant/artifacts/certs/{{ item.path | basename }}
+    remote_src: yes
+  with_items: "{{ pem_files.files }}"

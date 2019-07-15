@@ -1,0 +1,8 @@
+{% for host in ntp_local_servers %}
+server {{ host }} iburst
+{% endfor %}
+
+driftfile /var/lib/chrony/drift
+makestep 1.0 3
+rtcsync
+logdir /var/log/chrony
