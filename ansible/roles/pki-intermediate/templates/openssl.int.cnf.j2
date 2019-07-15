@@ -9,26 +9,24 @@ new_certs_dir     = $dir/newcerts
 database          = $dir/index.txt
 serial            = $dir/serial
 RANDFILE          = $dir/private/.rand
-private_key       = $dir/private/root.key.pem
-certificate       = $dir/certs/root.cert.pem
+private_key       = $dir/private/int.key.pem
+certificate       = $dir/certs/int.pem
 crlnumber         = $dir/crlnumber
-crl               = $dir/crl/root.crl.pem
+crl               = $dir/crl/int.crl.pem
 crl_extensions    = crl_ext
-default_crl_days  = 730
-
+default_crl_days  = 365
 default_md        = sha256
-
 name_opt          = ca_default
 cert_opt          = ca_default
 default_days      = 375
 preserve          = no
-policy            = policy_strict
+policy            = policy_loose
 
-[ policy_strict ]
-countryName            = match
-stateOrProvinceName    = match
+[ policy_loose ]
+countryName            = optional
+stateOrProvinceName    = optional
 localityName           = optional
-organizationName       = match
+organizationName       = optional
 organizationalUnitName = optional
 commonName             = supplied
 emailAddress           = optional
@@ -47,46 +45,23 @@ stateOrProvinceName    = Surrey
 localityName           = Camberley
 0.organizationName     = CylCorp
 organizationalUnitName = Security
-commonName             = CylCorp Root CA
+commonName             = CylCorp Intermediate CA
 
 [ v3_ca ]
 subjectKeyIdentifier   = hash
 authorityKeyIdentifier = keyid:always,issuer
-basicConstraints       = critical, CA:true
-keyUsage               = critical, digitalSignature, cRLSign, keyCertSign
-extendedKeyUsage       = serverAuth
-crlDistributionPoints  = @crl_section
-authorityInfoAccess    = @ocsp_section
-
-[ v3_intermediate_ca ]
-subjectKeyIdentifier   = hash
-authorityKeyIdentifier = keyid:always,issuer
 basicConstraints       = critical, CA:true, pathlen:0
 keyUsage               = critical, digitalSignature, cRLSign, keyCertSign
-authorityInfoAccess    = @ocsp_section
-crlDistributionPoints  = @crl_section
 
 [ crl_ext ]
 authorityKeyIdentifier = keyid:always
-issuerAltName          = issuer:copy 
-
-[ ocsp ]
-basicConstraints       = CA:FALSE
-subjectKeyIdentifier   = hash
-authorityKeyIdentifier = keyid, issuer
-keyUsage               = critical, digitalSignature
-extendedKeyUsage       = critical, OCSPSigning
-
-[alt_names]
-DNS.0 = Sandbox Intermidiate CA 1
-DNS.1 = Sandbox CA Intermidiate 1
 
 [crl_section]
-URI.0 = http://pki.cylindric.net/CylCorpRoot.crl
-URI.1 = http://pki.cylindric.net/SandboxRoot.crl
+URI.0 = http://pki.cylindric.net/CylCorpIntermediate.crl
+URI.1 = http://pki.cylindric.net/CylCorpIntermediate.crl
 
 [ocsp_section]
-caIssuers;URI.0 = http://pki.cylindric.net/CylCorpRoot.crt
-caIssuers;URI.1 = http://pki.backup.cylindric.net/CylCorpRoot.crt
+caIssuers;URI.0 = http://pki.cylindric.net/CylCorpIntermediate.crt
+caIssuers;URI.1 = http://pki.backup.cylindric.net/CylCorpIntermediate.crt
 OCSP;URI.0 = http://pki.cylindric.net/ocsp/
 OCSP;URI.1 = http://pki.backup.cylindric.net/ocsp/

@@ -1,0 +1,14 @@
+- name: Ensure root CSR directories exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+  with_items:
+    - "{{ pki_basepath }}/root-ca/certs"
+    - "/vagrant/artifacts/certs"
+
+- name: export root certificates
+  shell: |
+    find {{ pki_basepath }}/root-ca/certs \
+        -name \*.pem \
+        -exec cp {} /vagrant/artifacts/certs/ \;

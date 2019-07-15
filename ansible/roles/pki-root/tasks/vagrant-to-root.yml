@@ -1,0 +1,17 @@
+- name: Ensure root CSR directories exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+  with_items:
+    - "{{ pki_basepath }}/root-ca/csr"
+    - "/vagrant/artifacts/certs/root-requests"
+
+- name: import root requests
+  shell: |
+    find /vagrant/artifacts/certs/root-requests \
+        -name \*.csr \
+        -exec mv {} {{ pki_basepath }}/root-ca/csr/ \;
+    find {{ pki_basepath }}/root-ca/csr/ \
+        -name \*.csr \
+        -exec chmod 0400 {} \;

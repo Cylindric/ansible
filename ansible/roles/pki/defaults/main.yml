@@ -1,9 +1,0 @@
----
-pki_basepath: /ca
-
-pki_root_pass: rootpass
-# Certificates to auto-generate
-pki_certificates:
-    - {name: hassio, san: [hassio.home.cylindric.net, config.home.cylindric.net]}
-    - {name: mqtt, san: [mqtt.home.cylindric.net]}
-    - {name: networkpi, san: [networkpi.home.cylindric.net, pihole.home.cylindric.net]}

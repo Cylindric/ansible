@@ -1,0 +1,28 @@
+---
+# First create the Root CA.
+- name: PKI Root Initial Setup
+  hosts: rootca
+  roles:
+    - pki-root
+
+# Next create the Intermediate CA.
+# This will stop once it's created the 
+# Intermediate CSR and it's been signed.
+- name: PKI Intermediate Initial Setup
+  hosts: intermediateca
+  roles:
+    - pki-intermediate
+
+# Run the Root CA role again, and it will
+# sign any pending certificates
+- name: PKI Root Second Run
+  hosts: rootca
+  roles:
+    - pki-root
+
+# Finally run the Intermediate CA role again
+# to complete the CA setup.
+- name: PKI Intermediate Secondary Setup
+  hosts: intermediateca
+  roles:
+    - pki-intermediate

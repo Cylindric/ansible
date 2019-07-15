@@ -1,0 +1,5 @@
+---
+- name: PKI Intermediate Secondary Setup
+  hosts: intermediateca
+  roles:
+    - pki-intermediate

@@ -1,0 +1,11 @@
+---
+pki_basepath: /ca
+int_path: "/ca/int-ca"
+pki_int_pass: intpass
+
+
+# Certificates to auto-generate
+pki_certificates:
+    - {name: hassio, dns: [hassio.home.cylindric.net, config.home.cylindric.net]}
+    - {name: mqtt, dns: [mqtt.home.cylindric.net]}
+    - {name: networkpi, dns: [networkpi.home.cylindric.net, pihole.home.cylindric.net]}

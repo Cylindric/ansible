@@ -1,4 +1,4 @@
 .vagrant
 artifacts/
 !artifacts/README.md
-playbook.retry
+*.retry
